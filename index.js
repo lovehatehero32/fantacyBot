@@ -1,16 +1,14 @@
-
-const TelegramApi = require('node-telegram-bot-api')
-
+import TelegramApi from 'node-telegram-bot-api'
+import { parse } from './parser.js'
 
 const token = "1950332965:AAHx_fNvEq0q9ZouzuZWxbvpa9b14Tcx2Z4"
-
 const bot = new TelegramApi(token, {polling: true})
 
 
-
-
   const startBot = () => {
-      const date = '21.08.21 -- 13.30'
+
+      let date = parse().then(result => {return result})
+      
       const place = [
           "Senya : 1",
           "Valdis : 2",
@@ -31,24 +29,24 @@ const bot = new TelegramApi(token, {polling: true})
     bot.on('message', async msg => {
         const text = msg.text
         const chatId = msg.chat.id
-        const name = msg.chat.first_name
+        const name = msg.from.first_name
         
-        if (text == '/start') {
+        if (text == '/start@FantasyEPLbot') {
             await bot.sendSticker(chatId, "https://tlgrm.ru/_/stickers/35a/cc3/35acc3d9-6859-4b58-923e-bcb3d8779314/6.webp")
             return bot.sendMessage(chatId, `Привет ${name}`)   
         }
 
-        if (text == '/deadline') {
-            return bot.sendMessage(chatId, `Deadline is on ${date}`)
+        if (text == '/deadline@FantasyEPLbot') {
+            return bot.sendMessage(chatId, `Deadline is on ${await date}`)
         }
 
-        if (text == '/place') {
+        if (text == '/place@FantasyEPLbot') {
             return bot.sendMessage(chatId, `Current plases are ${place.map(el => {
                 return el
             })}`)
         }
 
-        if (text == '/points') {
+        if (text == '/points@FantasyEPLbot') {
             return bot.sendMessage(chatId, `Last tour points are ${points.map(el => {
                 return el 
             })}`)
@@ -60,4 +58,4 @@ const bot = new TelegramApi(token, {polling: true})
     
   }
 
-  startBot()
+  startBot() 
